@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static AntennaAssessmentHandler;
 
 public class EndAssessment : MonoBehaviour
 {
@@ -25,8 +24,14 @@ public class EndAssessment : MonoBehaviour
     {
 
         AntennaError();
+        CableError();
         RightCornerboardError();
         LeftCornerboardError();
+        LeftLadderError();
+        RightLadderError();
+        GroundingRodError();
+        FireExtinguisherError();
+        FODError();
 
         // Load the summary scene
         SceneManager.LoadScene(summarySceneName);
@@ -41,6 +46,18 @@ public class EndAssessment : MonoBehaviour
         else
         {
             Debug.LogError("Antenna Error key not found in PersistentDataStore!");
+        }
+    }
+
+    private void CableError()
+    {
+        if (PersistentDataStore.errorStatuses.TryGetValue("Cable Error", out var cableErrorData))
+        {
+            Debug.Log($"Cable Error Status: {cableErrorData.status}");
+        }
+        else
+        {
+            Debug.LogError("Cable Error key not found in PersistentDataStore!");
         }
     }
 
@@ -65,6 +82,64 @@ public class EndAssessment : MonoBehaviour
         else
         {
             Debug.LogError("Left Cornerboard Error key not found in PersistentDataStore!");
+        }
+    }
+
+    private void LeftLadderError()
+    {
+        if (PersistentDataStore.errorStatuses.TryGetValue("Left Ladder Error", out var leftLadderErrorData))
+        {
+            Debug.Log($"Left Ladder Error Status: {leftLadderErrorData.status}");
+        }
+        else
+        {
+            Debug.LogError("Left Ladder Error key not found in PersistentDataStore!");
+        }
+    }
+    private void RightLadderError()
+    {
+        if (PersistentDataStore.errorStatuses.TryGetValue("Right Ladder Error", out var rightLadderErrorData))
+        {
+            Debug.Log($"Right Ladder Error Status: {rightLadderErrorData.status}");
+        }
+        else
+        {
+            Debug.LogError("Right Ladder Error key not found in PersistentDataStore!");
+        }
+    }
+    private void GroundingRodError()
+    {
+        if (PersistentDataStore.errorStatuses.TryGetValue("Grounding Rod Error", out var groundingRodErrorData))
+        {
+            Debug.Log($"Grounding Rod Error Status: {groundingRodErrorData.status}");
+        }
+        else
+        {
+            Debug.LogError("Grounding Rod Error key not found in PersistentDataStore!");
+        }
+    }
+
+    private void FireExtinguisherError()
+    {
+        if (PersistentDataStore.errorStatuses.TryGetValue("Fire Extinguisher Error", out var fireExtinguisherErrorData))
+        {
+            Debug.Log($"Fire Extinguisher Error Status: {fireExtinguisherErrorData.status}");
+        }
+        else
+        {
+            Debug.LogError("Fire Extinguisher Error key not found in PersistentDataStore!");
+        }
+    }
+
+    private void FODError()
+    {
+        if (PersistentDataStore.errorStatuses.TryGetValue("FOD Error", out var fodErrorData))
+        {
+            Debug.Log($"FOD Error Status: {fodErrorData.status}");
+        }
+        else
+        {
+            Debug.LogError("FOD Error key not found in PersistentDataStore!");
         }
     }
 }

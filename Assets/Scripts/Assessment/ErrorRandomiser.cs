@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class ErrorRandomiser : MonoBehaviour
 {
+    private List<GameObject> activeFODs = new List<GameObject>();
+    private HashSet<GameObject> interactedFODs = new HashSet<GameObject>();
+
 
     [Header("Antenna Check")]
     public GameObject antennaDeployed;
@@ -54,8 +57,6 @@ public class ErrorRandomiser : MonoBehaviour
         InitializeErrors();
     }
 
-    
-
     private void InitializeErrors()
     {
         InitializeAntenna();
@@ -91,11 +92,19 @@ public class ErrorRandomiser : MonoBehaviour
         }
     }
 
-
     private void InitializeExposedCable()
     {
         bool isErrorActive = Random.value > 0.5f;
         exposedCableArea.SetActive(isErrorActive);
+
+        if (!PersistentDataStore.errorStatuses.ContainsKey("Cable Error"))
+        {
+            PersistentDataStore.errorStatuses["Cable Error"] = new ErrorStatusData();
+        }
+
+        PersistentDataStore.errorStatuses["Cable Error"].status = isErrorActive
+            ? ErrorStatus.NotCorrected
+            : ErrorStatus.NotTested;
     }
 
     private void InitializeRightCornerboard()
@@ -135,6 +144,15 @@ public class ErrorRandomiser : MonoBehaviour
         bool isErrorActive = Random.value > 0.5f;
         rightLadderCracked.SetActive(isErrorActive);
         rightLadderUsable.SetActive(!isErrorActive);
+
+        if (!PersistentDataStore.errorStatuses.ContainsKey("Right Ladder Error"))
+        {
+            PersistentDataStore.errorStatuses["Right Ladder Error"] = new ErrorStatusData();
+        }
+
+        PersistentDataStore.errorStatuses["Right Ladder Error"].status = isErrorActive
+            ? ErrorStatus.NotCorrected
+            : ErrorStatus.NotTested;
     }
 
     private void InitializeLeftLadder()
@@ -142,13 +160,30 @@ public class ErrorRandomiser : MonoBehaviour
         bool isErrorActive = Random.value > 0.5f;
         leftladderCracked.SetActive(isErrorActive);
         leftLadderUsable.SetActive(!isErrorActive);
+
+        if (!PersistentDataStore.errorStatuses.ContainsKey("Left Ladder Error"))
+        {
+            PersistentDataStore.errorStatuses["Left Ladder Error"] = new ErrorStatusData();
+        }
+
+        PersistentDataStore.errorStatuses["Left Ladder Error"].status = isErrorActive
+            ? ErrorStatus.NotCorrected
+            : ErrorStatus.NotTested;
     }
 
     private void InitializeFireExtinguisher()
     {
-        bool isErrorActive = Random.value > 0.5f;
-        expiredFireExtinguisher.SetActive(isErrorActive);
-        validFireExtinguisher.SetActive(!isErrorActive);
+        //bool isErrorActive = Random.value > 0.5f;
+        //expiredFireExtinguisher.SetActive(isErrorActive);
+        //validFireExtinguisher.SetActive(!isErrorActive);
+
+        if (!PersistentDataStore.errorStatuses.ContainsKey("Fire Extinguisher Error"))
+        {
+            PersistentDataStore.errorStatuses["Fire Extinguisher Error"] = new ErrorStatusData();
+        }
+
+        // Set the initial status to NotCorrected
+        PersistentDataStore.errorStatuses["Fire Extinguisher Error"].status = ErrorStatus.NotCorrected;
     }
 
     private void InitializeGroundingRod()
@@ -156,6 +191,15 @@ public class ErrorRandomiser : MonoBehaviour
         bool isErrorActive = Random.value > 0.5f;
         invalidGroundingRod.SetActive(isErrorActive);
         validGroundingRod.SetActive(!isErrorActive);
+
+        if (!PersistentDataStore.errorStatuses.ContainsKey("Grounding Rod Error"))
+        {
+            PersistentDataStore.errorStatuses["Grounding Rod Error"] = new ErrorStatusData();
+        }
+
+        PersistentDataStore.errorStatuses["Grounding Rod Error"].status = isErrorActive
+            ? ErrorStatus.NotCorrected
+            : ErrorStatus.NotTested;
     }
 
     private void InitializeFODs()

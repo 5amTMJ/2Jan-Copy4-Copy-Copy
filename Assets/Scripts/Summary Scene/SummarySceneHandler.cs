@@ -6,14 +6,26 @@ using TMPro;
 public class SummarySceneHandler : MonoBehaviour
 {
     public TextMeshProUGUI antennaErrorText; // Assign in Inspector
+    public TextMeshProUGUI exposedCableErrorText;
     public TextMeshProUGUI rightCornerboardErrorText; // Assign in Inspector
     public TextMeshProUGUI leftCornerboardErrorText; // Assign in Inspector
+    public TextMeshProUGUI leftLadderErrorText;
+    public TextMeshProUGUI rightLadderErrorText;
+    public TextMeshProUGUI groundingRodErrorText;
+    public TextMeshProUGUI fireExtinguisherErrorText;
+    public TextMeshProUGUI fodErrorText;
 
     private void Start()
     {
         DisplayAntennaText();
+        DisplayExposedCableText();
         DisplayRightCornerboardText();
         DisplayLeftCornerboardText();
+        DisplayLeftLadderText();
+        DisplayRightLadderText();
+        DisplayGroundingRodText();
+        DisplayFireExtinguisherText();
+        DisplayFODsText();
     }
 
     private void DisplayErrorStatus(string errorKey, TextMeshProUGUI textMesh)
@@ -46,6 +58,11 @@ public class SummarySceneHandler : MonoBehaviour
         DisplayErrorStatus("Antenna Error", antennaErrorText);
     }
 
+    private void DisplayExposedCableText()
+    {
+        DisplayErrorStatus("Cable Error", exposedCableErrorText);
+    }
+
     private void DisplayRightCornerboardText()
     {
         DisplayErrorStatus("Right Cornerboard Error", rightCornerboardErrorText);
@@ -56,11 +73,36 @@ public class SummarySceneHandler : MonoBehaviour
         DisplayErrorStatus("Left Cornerboard Error", leftCornerboardErrorText);
     }
 
-    private void SetText(string message, Color color)
+    private void DisplayLeftLadderText()
     {
-        antennaErrorText.text = message;
-        antennaErrorText.color = color;
+        DisplayErrorStatus("Left Ladder Error", leftLadderErrorText);
     }
+
+    private void DisplayRightLadderText()
+    {
+        DisplayErrorStatus("Right Ladder Error", rightLadderErrorText);
+    }
+
+    private void DisplayGroundingRodText()
+    {
+        DisplayErrorStatus("Grounding Rod Error", groundingRodErrorText);
+    }
+
+    private void DisplayFireExtinguisherText()
+    {
+        DisplayErrorStatus("Fire Extinguisher Error", fireExtinguisherErrorText);
+    }
+
+    private void DisplayFODsText()
+    {
+        DisplayErrorStatus("FOD Error", fodErrorText);
+    }
+
+    //private void SetText(string message, Color color)
+    //{
+    //  antennaErrorText.text = message;
+    //  antennaErrorText.color = color;
+    // }
 
     private void SetText(TextMeshProUGUI textComponent, string message, Color color)
     {
