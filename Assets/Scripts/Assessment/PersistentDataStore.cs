@@ -9,7 +9,7 @@ public static class PersistentDataStore
     {
         if (!errorStatuses.ContainsKey("FOD Error"))
         {
-            errorStatuses["FOD Error"] = new ErrorStatusData { status = ErrorStatus.NotTested };
+            errorStatuses["FOD Error"] = new ErrorStatusData { status = ErrorStatus.NotCorrected };
         }
     }
 

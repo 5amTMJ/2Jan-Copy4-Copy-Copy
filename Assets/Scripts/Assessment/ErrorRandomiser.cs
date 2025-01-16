@@ -40,17 +40,17 @@ public class ErrorRandomiser : MonoBehaviour
     public GameObject invalidGroundingRod;
     public GameObject validGroundingRod;
 
-    [Header("FOD Check")]
-    public GameObject firstAidKit;
-    public GameObject aluminiumCan;
-    public GameObject wrench;
-    public GameObject brokenBottle;
-    public GameObject bucket;
-    public GameObject lunchBox;
-    public GameObject paperBox;
-    public GameObject newspaper;
-    public GameObject axe;
-    public GameObject hammer;
+    //[Header("FOD Check")]
+    //public GameObject firstAidKit;
+    //public GameObject aluminiumCan;
+    //public GameObject wrench;
+    //public GameObject brokenBottle;
+    //public GameObject bucket;
+    //public GameObject lunchBox;
+    //public GameObject paperBox;
+    //public GameObject newspaper;
+    //public GameObject axe;
+    //public GameObject hammer;
 
     private void Start()
     {
@@ -67,7 +67,7 @@ public class ErrorRandomiser : MonoBehaviour
         InitializeLeftLadder();
         InitializeFireExtinguisher();
         InitializeGroundingRod();
-        InitializeFODs();
+        //InitializeFODs();
     }
 
     private void InitializeAntenna()
@@ -202,33 +202,33 @@ public class ErrorRandomiser : MonoBehaviour
             : ErrorStatus.NotTested;
     }
 
-    private void InitializeFODs()
-    {
-        List<GameObject> fodObjects = new List<GameObject>
-        {
-            firstAidKit, aluminiumCan, wrench, brokenBottle,
-            bucket, lunchBox, paperBox, newspaper, axe, hammer
-        };
+    //private void InitializeFODs()
+    //{
+        //List<GameObject> fodObjects = new List<GameObject>
+        //{
+            //firstAidKit, aluminiumCan, wrench, brokenBottle,
+            //bucket, lunchBox, paperBox, newspaper, axe, hammer
+        //};
 
-        int activeFODCount = 0;
+        //int activeFODCount = 0;
 
-        foreach (var fod in fodObjects)
-        {
-            bool isActive = Random.value > 0.5f;
-            fod.SetActive(isActive);
-            if (isActive) activeFODCount++;
-        }
+        //foreach (var fod in fodObjects)
+        //{
+            //bool isActive = Random.value > 0.5f;
+            //fod.SetActive(isActive);
+            //if (isActive) activeFODCount++;
+        //}
 
-        while (activeFODCount < 5)
-        {
-            foreach (var fod in fodObjects)
-            {
-                if (!fod.activeSelf && activeFODCount < 5)
-                {
-                    fod.SetActive(true);
-                    activeFODCount++;
-                }
-            }
-        }
-    }
+        //while (activeFODCount < 5)
+        //{
+            //foreach (var fod in fodObjects)
+            //{
+                //if (!fod.activeSelf && activeFODCount < 5)
+                //{
+                    //fod.SetActive(true);
+                    //activeFODCount++;
+                //}
+            //}
+        //}
+    //}
 }
