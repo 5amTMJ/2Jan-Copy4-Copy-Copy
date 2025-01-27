@@ -14,6 +14,8 @@ public class SummarySceneHandler : MonoBehaviour
     public TextMeshProUGUI groundingRodErrorText;
     public TextMeshProUGUI fireExtinguisherErrorText;
     public TextMeshProUGUI fodErrorText;
+    public TextMeshProUGUI finalTimeText;
+    public TextMeshProUGUI scoreText;
 
     private void Start()
     {
@@ -26,6 +28,10 @@ public class SummarySceneHandler : MonoBehaviour
         DisplayGroundingRodText();
         DisplayFireExtinguisherText();
         DisplayFODsText();
+        DisplayTime();
+
+        // Once everything is displayed, call a function to save CSV
+        SaveSummaryData();
     }
 
     private void DisplayErrorStatus(string errorKey, TextMeshProUGUI textMesh)
@@ -104,9 +110,104 @@ public class SummarySceneHandler : MonoBehaviour
     //  antennaErrorText.color = color;
     // }
 
+    private void DisplayTime()
+    {
+        float finalTime = PersistentDataStore.assessmentTime;
+        // or PlayerPrefs.GetFloat("AssessmentTime", 0f);
+
+        int minutes = Mathf.FloorToInt(finalTime / 60f);
+        int seconds = Mathf.FloorToInt(finalTime % 60f);
+        finalTimeText.text = string.Format("Final time: {0:00}:{1:00}", minutes, seconds);
+    }
+
     private void SetText(TextMeshProUGUI textComponent, string message, Color color)
     {
         textComponent.text = message;
         textComponent.color = color;
     }
+
+    private void SaveSummaryData()
+    {
+        // 1) Identify the current user
+        string user = TraineeRegister.currentUsername;  // The static variable
+        if (string.IsNullOrEmpty(user))
+        {
+            Debug.LogWarning("No current user found. Cannot save summary data.");
+            return;
+        }
+
+        // 2) Gather final time
+        float finalTime = PersistentDataStore.assessmentTime;
+
+        // 3) Gather error statuses (strings for CSV)
+        string antennaStatus = GetErrorStatusString("Antenna Error");
+        string cableStatus = GetErrorStatusString("Cable Error");
+        string rightCornerStatus = GetErrorStatusString("Right Cornerboard Error");
+        string leftCornerStatus = GetErrorStatusString("Left Cornerboard Error");
+        string leftLadderStatus = GetErrorStatusString("Left Ladder Error");
+        string rightLadderStatus = GetErrorStatusString("Right Ladder Error");
+        string groundingRodStatus = GetErrorStatusString("Grounding Rod Error");
+        string fireExtinguisherStatus = GetErrorStatusString("Fire Extinguisher Error");
+        string fodStatus = GetErrorStatusString("FOD Error");
+
+        // 4) Calculate the score
+        int correctedCount = 0;
+        int testedCount = 0;
+        // We'll treat "NotTested" as not part of testedCount, 
+        // so testedCount = corrected + notCorrected
+
+        // For convenience, let's store all statuses in a local array
+        string[] allStatuses = {
+        antennaStatus,
+        cableStatus,
+        rightCornerStatus,
+        leftCornerStatus,
+        leftLadderStatus,
+        rightLadderStatus,
+        groundingRodStatus,
+        fireExtinguisherStatus,
+        fodStatus
+    };
+
+        // Count how many are Corrected, how many are tested
+        foreach (string status in allStatuses)
+        {
+            if (status == ErrorStatus.Corrected.ToString())
+            {
+                correctedCount++;
+                testedCount++;
+            }
+            else if (status == ErrorStatus.NotCorrected.ToString())
+            {
+                testedCount++;
+            }
+            // If "NotTested" or "Unknown", ignore from testedCount
+        }
+
+        if (scoreText != null)
+        {
+            // Example: "Score: 3/5 (60%)"
+            scoreText.text = $"Score: {correctedCount}/{testedCount}";
+        }
+
+        // 5) Update the CSV row
+        // Pass these new parameters (correctedCount, testedCount) to UpdateTraineeRow
+        TraineeRegister.UpdateTraineeRow(
+            user, finalTime,
+            antennaStatus, cableStatus, rightCornerStatus, leftCornerStatus,
+            leftLadderStatus, rightLadderStatus, groundingRodStatus,
+            fireExtinguisherStatus, fodStatus,
+            correctedCount, testedCount
+        );
+    }
+
+    private string GetErrorStatusString(string key)
+    {
+        if (PersistentDataStore.errorStatuses.TryGetValue(key, out var data))
+        {
+            return data.status.ToString(); // e.g., "Corrected", "NotCorrected", etc.
+        }
+        return "Unknown";
+    }
+
 }
